@@ -40,7 +40,7 @@ post_save.connect(create_user_profile, sender=User)
 
 class Event(models.Model):
   recipient   = models.OneToOneField(User)
-  attendees   = models.ManyToManyField(User)
+  attendees   = models.ManyToManyField(User, related_name='+')
   date	      = models.DateField(null=False, blank=False, db_index=True)
   time_start  = models.TimeField(null=False, blank=True)
   time_end    = models.TimeField(null=False, blank=True)
@@ -48,8 +48,7 @@ class Event(models.Model):
 				  null=False, \
 				  blank=False, \
 				  db_index=True, \
-				  unique=True, \
-				  validators=None)
+				  unique=True)
   location    = models.TextField(null=False, blank=False)
   details     = models.TextField(null=False, blank=True)
 
@@ -59,8 +58,7 @@ class Gift(models.Model):
 			  null=False, \
 			  blank=False, \
 			  db_index=True, \
-			  unique=True, \
-			  validators=None)
+			  unique=True)
   value = models.DecimalField(decimal_places=2, \
 			      max_digits=8, \
 			      validators=[val_posint])
@@ -78,7 +76,7 @@ class AttendeeBudget(models.Model):
 			      max_digits=8, \
 			      validators=[val_posint])
 
-class AttendeeGifts(models.Model)
+class AttendeeGifts(models.Model):
   attendee = models.ForeignKey(User)
   event = models.ForeignKey(Event)
   gift = models.ForeignKey(Gift)
