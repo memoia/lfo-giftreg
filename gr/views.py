@@ -6,5 +6,5 @@ from gr.models import Event
 
 
 def index(request):
-  return render_to_response('gr/index.html', {})
+  return render_to_response('gr/main.html', {})
 

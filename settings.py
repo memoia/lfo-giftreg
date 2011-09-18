@@ -6,6 +6,9 @@ import os
 
 SITE_PATH = os.path.dirname(os.path.abspath(__file__))
 
+AUTH_PROFILE_MODULE = 'gr.UserProfile'
+
+PUBLIC_ROOT = SITE_PATH + '/public'
 
 
 # Django settings for giftreg project.
@@ -108,6 +111,5 @@ INSTALLED_APPS = (
     'gr',
 )
 
-AUTH_PROFILE_MODULE = 'gr.UserProfile'
 
 

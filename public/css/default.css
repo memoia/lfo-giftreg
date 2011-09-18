@@ -1,0 +1,60 @@
+/* IMM4LFO 2011-09-17 */
+
+body {
+  background-color: #cccccc;
+  font-family: sans-serif;
+  width: 750px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+body h1 {
+  color: #333333;
+  text-align: left;
+  font-size: x-large;
+  font-variant: small-caps;
+}
+
+body h2 {
+  color: #333333;
+  text-align: center;
+  font-size: large;
+  border-bottom: 1px dashed #333333;
+}
+
+body div#top {
+  border: 1px solid red;
+  clear: both;
+}
+
+body div#content {
+  border: 1px solid green;
+  width: 550px;
+  padding: 5px;
+  float: left;
+}
+
+body div#menu_right {
+  border: 1px solid blue;
+  width: 175px;
+  padding: 5px;
+  float: left;
+}
+body div#menu_right ul {
+  list-style-type: none; 
+  margin-left: -15px;
+}
+body div#menu_right ul li {
+  margin-bottom: 0.5em;
+}
+body div#menu_right ul li:hover {
+  background-color: #c1c1c1;
+  cursor: pointer;
+}
+
+body div#bottom {
+  border: 1px solid black;
+  clear: both;
+  text-align: center;
+}
+
