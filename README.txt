@@ -28,7 +28,7 @@ Design choices:
 
 * Use the Event to enforce the singular relationship between Recipients
   and Events, so that Recipients can potentially have multiple Events 
-  in future if we so decide.
+  in future if we so decide. Keep gift list separate for same reason.
 
 * Single app; gift registry as a whole could be used as a component in
   larger sites (say, an online store).
