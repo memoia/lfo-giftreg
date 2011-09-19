@@ -1,0 +1,28 @@
+{% extends "gr/main.html" %}
+
+{% block title %}Gift Registry: Event List{% endblock %}
+{% block head %}{% endblock %}
+
+{% block content %}
+<h1>Event List</h1>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Host</th>
+    <th>Date</th>
+    <th>Time</th>
+    <th>Location</th>
+  </tr>
+  {% for e in events %}
+  <tr>
+    <td>{{ e.name }}</td>
+    <td>{{ e.recipient }}</td>
+    <td>{{ e.date }}</td>
+    <td>{{ e.time_start }} - {{ e.time_end }}</td>
+    <td>{{ e.location }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}
+
+
