@@ -58,3 +58,21 @@ body div#bottom {
   text-align: center;
 }
 
+table.simple {
+  border-collapse: collapse;
+}
+table.simple td, th {
+  border: 1px solid black;
+  padding: 3px;
+}
+
+div.warning {
+  border: 1px solid red;
+  background-color: #ffcccc;
+  width: 75%;
+  text-align: center;
+  padding: 10px;
+  margin-left: auto;
+  margin-right: auto;
+}
+

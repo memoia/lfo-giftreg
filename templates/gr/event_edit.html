@@ -1,0 +1,25 @@
+{% extends "gr/main.html" %}
+
+{% block title %}Gift Registry: Event Editor{% endblock %}
+{% block head %}
+{% endblock %}
+
+{% block content %}
+<h1>Event Editor</h1>
+
+{% if form.errors %}
+<div class='warning'>
+  Data could not be saved.
+</div>
+{% endif %}
+
+<form method="post">
+{% csrf_token %}
+{{ form.as_p }}
+<input type="hidden" name="event_id" value="{{ event_id|default:"" }}" />
+<input type="submit" value="Save" />
+</form>
+
+{% endblock %}
+
+

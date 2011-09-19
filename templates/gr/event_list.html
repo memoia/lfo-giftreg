@@ -5,7 +5,10 @@
 
 {% block content %}
 <h1>Event List</h1>
-<table>
+<div>
+  <a href="add/">Create New Event</a>
+</div>
+<table class='simple'>
   <tr>
     <th>Name</th>
     <th>Host</th>
@@ -15,7 +18,7 @@
   </tr>
   {% for e in events %}
   <tr>
-    <td>{{ e.name }}</td>
+    <td><a href="edit/{{ e.id }}">{{ e.name }}</a></td>
     <td>{{ e.recipient }}</td>
     <td>{{ e.date }}</td>
     <td>{{ e.time_start }} - {{ e.time_end }}</td>

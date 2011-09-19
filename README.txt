@@ -50,6 +50,9 @@ it might be nice to:
   Location might include attributes for mailing address and geocoordinates,
   allowing for quick map-drawing through a public API.
 
+* Clarify whether events are exclusive or if any attendee can choose to
+  attend any available event.
+
 
 QUESTIONS
 
