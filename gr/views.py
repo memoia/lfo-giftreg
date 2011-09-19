@@ -62,3 +62,18 @@ def event_edit(request, event_id=None, remove_flag=None):
   return render_to_response('gr/event_edit.html', form_fields)
 
 
+
+
+
+def wishlist_index(request):
+  wishlists=RecipientWishList.objects \
+		  .values('recipient') \
+		  .distinct() \
+		  .select_related(depth=1)
+  return render_to_response('gr/wishlist_index.html', {'wishlists':wishlists})
+
+def wishlist_list(request, user_id=None):
+  pass
+
+
+
