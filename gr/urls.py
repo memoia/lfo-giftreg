@@ -8,5 +8,6 @@ urlpatterns = patterns('gr.views',
     (r'^event/$', 'event_list'),
     (r'^event/add/$', 'event_edit'),
     (r'^event/edit/(?P<event_id>\d+)/$', 'event_edit'),
-    (r'^(?P<pk>\d+)/$', 'ummmm'),
+    (r'^event/edit/(?P<event_id>\d+)/(?P<remove_flag>del)/$', 'event_edit'),
+    #(r'^(?P<pk>\d+)/$', 'ummmm'),
 )

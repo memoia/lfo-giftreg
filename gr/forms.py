@@ -18,7 +18,7 @@ class EventForm(ModelForm):
 		  help_text='Control-click/command-click to select multiple', \
 		  required = False)
   other_attendees = CharField(widget=Textarea, \
-		  help_text='Enter email addresses one per line', \
+		  help_text='Enter email addresses one per line (XXX THIS DOES NOT DO ANYTHING YET BUT IT SHOULD ADD NEW USER ACCOUNTS If CORRESPONDING EMAIL DOES NOT EXIST IN SYSTEM)', \
 		  required = False)
 
   """
@@ -39,10 +39,18 @@ class EventForm(ModelForm):
     return v
   """
 
+  # require event date to be at least one day after today
+  def validate_is_future_event(self, v):
+    if v > datetime.datetime.now().date():
+      return v
+    raise ValidationError('Event must be after today')
+
+
   def __init__(self, *args, **kwargs):
     super(EventForm, self).__init__(*args, **kwargs)
     self.fields['date'].help_text = 'Use yyyy-mm-dd format'
     self.fields['time_start'].help_text = 'Use hh:mm:ss format'
+    self.fields['date'].validators=[self.validate_is_future_event]
     # apparently django does this automatically.
     #self.fields['date'].validators=[self.validate_date]
     #self.fields['time_start'].validators=[self.validate_time]
