@@ -29,6 +29,12 @@ class UserProfile(models.Model):
   gr_user_type = models.CharField(default='OTH', \
 				  max_length=3, \
 				  choices=GR_USER_TYPES_CHOICES)
+  
+  def is_recipient(self):
+    return self.gr_user_type == 'RCP'
+
+  def is_attendee(self):
+    return self.gr_user_type == 'ATT'
 
 def create_user_profile(sender, instance, created, **kwargs):
   if created:
@@ -37,13 +43,12 @@ def create_user_profile(sender, instance, created, **kwargs):
 post_save.connect(create_user_profile, sender=User)
 
 
-
 class Event(models.Model):
   recipient   = models.OneToOneField(User)
   attendees   = models.ManyToManyField(User, related_name='+')
   date	      = models.DateField(null=False, blank=False, db_index=True)
-  time_start  = models.TimeField(null=False, blank=True)
-  time_end    = models.TimeField(null=False, blank=True)
+  time_start  = models.TimeField(null=True, blank=True)
+  time_end    = models.TimeField(null=True, blank=True)
   name	      = models.CharField(max_length=255, \
 				  null=False, \
 				  blank=False, \
@@ -51,6 +56,11 @@ class Event(models.Model):
 				  unique=True)
   location    = models.TextField(null=False, blank=False)
   details     = models.TextField(null=False, blank=True)
+
+  def save(self, *args, **kwargs):
+    if not self.recipient.get_profile().is_recipient():
+      raise Exception('Event host must be a recipient user')
+    return super(Event, self).save(*args, **kwargs)
 
 
 class Gift(models.Model):
@@ -77,11 +87,11 @@ class AttendeeBudget(models.Model):
 
   def save(self, *args, **kwargs):
     # uniq constraint on (attendee,event) """
-    c = AttendeeBudget.objects.filter(attendee__exact=attendee, \
-				      event__exact=event)
+    c = AttendeeBudget.objects.filter(attendee__exact=self.attendee, \
+				      event__exact=self.event)
     if len(c)>0:
-      raise Exception("Budget attendee=%s, event=%s exists" % (attendee,event))
-    super(AttendeeBudget, self).save(*args, **kwargs)
+      raise Exception('Budget for this attendee/event already exists')
+    return super(AttendeeBudget, self).save(*args, **kwargs)
 
 
 class AttendeeGifts(models.Model):
