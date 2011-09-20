@@ -75,6 +75,8 @@ class Gift(models.Model):
   value = models.DecimalField(decimal_places=2, \
 			      max_digits=8, \
 			      validators=[val_posint])
+  def __unicode__(self):
+    return u"%s ($%s)" % (self.name, self.value)
 
 class RecipientWishList(models.Model):
   recipient = models.ForeignKey(User)

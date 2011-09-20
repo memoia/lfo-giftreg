@@ -182,7 +182,19 @@ def attendee_budget_edit(request, attendee_id, event_id):
 
 
 def attendee_gifts_list(request, attendee_id, event_id):
-  pass
+  """
+  queryset = Gift.objects.filter(recipientwishlist__gift__id=gift__id, \
+				    attendee__exact=attendee_id, \
+				    event__exact=event_id )
+  """
+  # TODO need to formulate query that gets from recipientwishlist
+  #	  joins with user, event, attendeegifts,
+  #	  where rwl.active is true.... maybe use objects.raw()...
+  queryset = Gift.objects.all()
+  form = AttendeeGiftsForm(queryset=queryset)
+  form_fields = {'form':form}
+  form_fields.update(csrf(request))
+  return render_to_response('gr/attendee_gifts_list.html', form_fields)
 
 
 

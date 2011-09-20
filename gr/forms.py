@@ -76,13 +76,33 @@ class RecipientWishListWithGiftForm(Form):
   wishlist_active = BooleanField(initial=True,required=False)
 
 
-
-
-
 class AttendeeBudgetForm(Form):
-  attendee = CharField(widget=widgets.HiddenInput, required=True)
-  event = CharField(widget=widgets.HiddenInput, required=True)
+  attendee = IntegerField(widget=widgets.HiddenInput, required=True)
+  event = IntegerField(widget=widgets.HiddenInput, required=True)
   maxpurchases = DecimalField(max_digits=8, required=True)
     
+
+# could try using a modelformset for these instead...maybe next time
+class AttendeeGiftsForm(Form):
+  attendee = IntegerField(widget=widgets.HiddenInput, required=True)
+  event = IntegerField(widget=widgets.HiddenInput, required=True)
+  gifts = None
+
+  def __init__(self, queryset=None, *args, **kwargs):
+    super(AttendeeGiftsForm, self).__init__(*args, **kwargs)
+    if queryset is None:
+      queryset = Gift.objects.all()
+    self.fields['gifts'] = ModelMultipleChoiceField( \
+			      widget=widgets.CheckboxSelectMultiple, \
+			      queryset=queryset)
+  
+  def clean_gifts(self):
+    if len(self.cleaned_data['gifts']) > 2:
+      raise ValidationError('No more than two gifts');
+    return self.cleaned_data['gifts']
+  
+
+
+
 
 
