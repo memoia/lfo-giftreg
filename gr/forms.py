@@ -88,7 +88,7 @@ class AttendeeGiftsForm(Form):
   event = IntegerField(widget=widgets.HiddenInput, required=True)
   gifts = None
 
-  def __init__(self, queryset=None, *args, **kwargs):
+  def __init__(self, items=None, queryset=None, *args, **kwargs):
     super(AttendeeGiftsForm, self).__init__(*args, **kwargs)
     if queryset is None:
       queryset = Gift.objects.all()

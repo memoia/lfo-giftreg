@@ -5,6 +5,7 @@ from django.shortcuts import render_to_response, get_object_or_404, redirect
 #from django.http import HttpResponseRedirect
 #from django.core.urlresolvers import reverse
 from django.core.context_processors import csrf
+from django.db.models import F, Q
 import datetime
 from gr.models import *
 from gr.forms import *
@@ -182,19 +183,28 @@ def attendee_budget_edit(request, attendee_id, event_id):
 
 
 def attendee_gifts_list(request, attendee_id, event_id):
-  """
-  queryset = Gift.objects.filter(recipientwishlist__gift__id=gift__id, \
-				    attendee__exact=attendee_id, \
-				    event__exact=event_id )
-  """
-  # TODO need to formulate query that gets from recipientwishlist
-  #	  joins with user, event, attendeegifts,
-  #	  where rwl.active is true.... maybe use objects.raw()...
-  queryset = Gift.objects.all()
-  form = AttendeeGiftsForm(queryset=queryset)
+
+  # I hope there's a better way to do this....
+  event = Event.objects.get(pk=1)
+  recipient = User.objects.get(pk=event.recipient.id)
+  wishlist = RecipientWishList.objects \
+	      .filter(recipient=recipient) \
+	      .select_related(depth=1) \
+	      .exclude(gift__in= \
+		AttendeeGifts.objects.filter( \
+		  Q(event__id=event_id), \
+		  ~Q(attendee__id=attendee_id) \
+		) \
+	      )
+
+  gifts = Gift.objects.filter(pk__in=[w.gift.id for w in wishlist])
+
+  form = AttendeeGiftsForm(queryset=gifts)
   form_fields = {'form':form}
   form_fields.update(csrf(request))
   return render_to_response('gr/attendee_gifts_list.html', form_fields)
+
+
 
 
 
