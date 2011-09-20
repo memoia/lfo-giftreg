@@ -197,9 +197,32 @@ def attendee_gifts_list(request, attendee_id, event_id):
 		) \
 	      )
 
+  # XXX need to further filter gifts---if not "active" and not selected
+  # by current attendee, don't show it.
+
   gifts = Gift.objects.filter(pk__in=[w.gift.id for w in wishlist])
 
-  form = AttendeeGiftsForm(queryset=gifts)
+  # TODO pass this into form...
+  checked = AttendeeGifts.objects.filter(event__id=event_id, \
+					    attendee__id=attendee_id)
+  
+  gift_choices = [ (x.id, x) for x in gifts ]
+
+  if request.method == 'POST':
+
+    form = AttendeeGiftsForm(request.POST)
+    if form.is_valid():
+      raise Exception('haha')
+    else:
+      form.fields['gifts'].choices = gift_choices
+      form_fields = {'form':form}
+      form_fields.update(csrf(request))
+      return render_to_response('gr/attendee_gifts_list.html', form_fields)
+
+
+  form = AttendeeGiftsForm(initial={'event':event_id,'attendee':attendee_id})
+  form.fields['gifts'].choices = gift_choices
+
   form_fields = {'form':form}
   form_fields.update(csrf(request))
   return render_to_response('gr/attendee_gifts_list.html', form_fields)

@@ -86,15 +86,20 @@ class AttendeeBudgetForm(Form):
 class AttendeeGiftsForm(Form):
   attendee = IntegerField(widget=widgets.HiddenInput, required=True)
   event = IntegerField(widget=widgets.HiddenInput, required=True)
-  gifts = None
+  gifts = MultipleChoiceField(widget=widgets.CheckboxSelectMultiple)
 
-  def __init__(self, items=None, queryset=None, *args, **kwargs):
+  # set choices in calling view, rather than as init arg...
+  """
+  def __init__(self, queryset=None, *args, **kwargs):
     super(AttendeeGiftsForm, self).__init__(*args, **kwargs)
     if queryset is None:
       queryset = Gift.objects.all()
-    self.fields['gifts'] = ModelMultipleChoiceField( \
-			      widget=widgets.CheckboxSelectMultiple, \
-			      queryset=queryset)
+    choices = [ (x.id, x) for x in queryset ]
+    self.fields['gifts'].choices = choices
+    #self.fields['gifts'] = ModelMultipleChoiceField( \
+    #			      widget=widgets.CheckboxSelectMultiple, \
+    #			      queryset=queryset)
+  """
   
   def clean_gifts(self):
     if len(self.cleaned_data['gifts']) > 2:
