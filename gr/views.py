@@ -29,7 +29,7 @@ def event_view(request, event_id):
     event = Event.objects.select_related(depth=1).get(pk=event_id)
   except Event.DoesNotExist:
     return redirect(event_list)
-  return render_to_response('gr/event_view.html', {'event':event})
+  return render_to_response('gr/event_view.html', {'event':event, 'user':request.user})
 
 def event_edit(request, event_id=None, remove_flag=None):
   if remove_flag == 'del' and event_id is not None:
@@ -128,6 +128,63 @@ def wishlist_edit(request, user_id, wishlist_id=None):
   form_fields = {'form':form,'user_id':user_id}
   form_fields.update(csrf(request))
   return render_to_response('gr/wishlist_edit.html', form_fields)
+
+
+
+
+
+def attendee_budget_edit(request, attendee_id, event_id):
+
+  # ensure a budget can't be modified for an attendee
+  # who isn't invited to the specified event (only if
+  # sessions are working to make quick checks easier...)
+  if request.user.id is not None:
+    try:
+      t=Event.objects.get(id__exact=event_id, attendees__id__exact=attendee_id)
+    except Event.DoesNotExist:
+      return redirect(event_view, event_id=event_id)
+
+  def _get_budget(event_id, attendee_id):
+    return AttendeeBudget.objects.get( \
+			event__exact=event_id, attendee__exact=attendee_id)
+
+  if request.method == 'POST':
+    form = AttendeeBudgetForm(request.POST)
+    if form.is_valid():
+      e = form.cleaned_data['event']
+      a = form.cleaned_data['attendee']
+      try:
+	b = _get_budget(e,a)
+      except AttendeeBudget.DoesNotExist:
+	b = AttendeeBudget()
+	b.event = Event.objects.get(pk=e)
+	b.attendee = User.objects.get(pk=a)
+      b.maxpurchases = form.cleaned_data['maxpurchases']
+      b.save()
+      return redirect(event_view, event_id=e) 
+    else:
+      form_fields = {'form':form}
+      form_fields.update(csrf(request))
+      return render_to_response('gr/attendee_budget_edit.html', form_fields)
+
+  else:
+    d = {'attendee':attendee_id,'event':event_id}
+    try:
+      budget = _get_budget(event_id, attendee_id)
+      d['maxpurchases'] = budget.maxpurchases
+    except AttendeeBudget.DoesNotExist:
+      pass
+    form = AttendeeBudgetForm(initial=d)
+    form_fields = {'form':form}
+    form_fields.update(csrf(request))
+    return render_to_response('gr/attendee_budget_edit.html', form_fields)
+
+
+
+def attendee_gifts_list(request, attendee_id, event_id):
+  pass
+
+
 
 
 

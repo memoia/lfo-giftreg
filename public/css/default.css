@@ -37,7 +37,7 @@ body div#content {
 body div#menu_right {
   border: 1px solid blue;
   width: 175px;
-  padding: 5px;
+  padding: 5px 5px 0 5px;
   float: left;
 }
 body div#menu_right ul {
@@ -50,6 +50,16 @@ body div#menu_right ul li {
 body div#menu_right ul li:hover {
   background-color: #c1c1c1;
   cursor: pointer;
+}
+body div#menu_right a {
+  text-decoration: none;
+  color: blue;
+}
+body div#menu_right h1 {
+  font-size: medium;
+  text-align: center;
+  margin: -0.2em 0 -1em 0;
+  border-bottom: 1px dotted blue;
 }
 
 body div#bottom {

@@ -23,13 +23,30 @@
   </div>
 
   <div id="content">
-    {% block content %}Hello{% endblock %}
+    {% block content %}
+    <h1>Welcome!</h1>
+    <p>
+      This is the default content for the Gift Registry app.
+      Normally this should show only from the "home" page.
+    </p>
+    <p>
+      Use the menu to the right to navigate the app.
+      You may register as a "Recipient", create an event,
+      and invite attendees. Invited attendees automatically
+      have corresponding user accounts created for them.
+    </p>
+    <p>
+      If you already have an account, log in and head to
+      the Event List to get started.
+    </p>
+    {% endblock %}
   </div>
 
   <div id="menu_right">
+    <h1>Menu</h1>
     <ul>
-      <li>menu1</li>
-      <li>menu2</li>
+      <li>Register/Auth</li>
+      <li><a href="{% url gr.views.event_list %}">Event List</a></li>
       <li>menu3</li>
     </ul>
   </div>

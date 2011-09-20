@@ -17,5 +17,9 @@ urlpatterns = patterns('gr.views',
     (r'^wishlist/(?P<user_id>\d+)/add/$', 'wishlist_edit'),
     (r'^wishlist/(?P<user_id>\d+)/edit/(?P<wishlist_id>\d+)/$', 'wishlist_edit'),
 
+    (r'^attendee/(?P<attendee_id>\d+)/budget/(?P<event_id>\d+)/$', 'attendee_budget_edit'),
+
+    (r'^attendee/(?P<attendee_id>\d+)/gifts/(?P<event_id>\d+)/$', 'attendee_gifts_list'),
+
     #(r'^(?P<pk>\d+)/$', 'ummmm'),
 )

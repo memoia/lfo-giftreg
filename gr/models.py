@@ -62,6 +62,9 @@ class Event(models.Model):
       raise Exception('Event host must be a recipient user')
     return super(Event, self).save(*args, **kwargs)
 
+  def __unicode__(self):
+    return self.name
+
 
 class Gift(models.Model):
   name = models.CharField(max_length=255, \
@@ -86,11 +89,14 @@ class AttendeeBudget(models.Model):
 			      validators=[val_posint])
 
   def save(self, *args, **kwargs):
-    # uniq constraint on (attendee,event) """
-    c = AttendeeBudget.objects.filter(attendee__exact=self.attendee, \
+    # uniq constraint on (attendee,event)
+    try:
+      c = AttendeeBudget.objects.get(attendee__exact=self.attendee, \
 				      event__exact=self.event)
-    if len(c)>0:
-      raise Exception('Budget for this attendee/event already exists')
+      if c.id != self.id:
+	raise Exception('Budget for this attendee/event already exists')
+    except AttendeeBudget.DoesNotExist:
+      pass
     return super(AttendeeBudget, self).save(*args, **kwargs)
 
 

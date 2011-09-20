@@ -44,7 +44,7 @@
 <div>
 <h2>For attendees...</h2>
 <ol>
-  <li>Specify Budget</li>
+  <li><a href="{% url gr.views.attendee_budget_edit user.id|default:1 event.id %}">Specify Budget</a></li>
   <li>Select Gifts</li>
 </ol>
 </div>

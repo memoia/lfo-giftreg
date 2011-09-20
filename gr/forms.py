@@ -79,3 +79,10 @@ class RecipientWishListWithGiftForm(Form):
 
 
 
+class AttendeeBudgetForm(Form):
+  attendee = CharField(widget=widgets.HiddenInput, required=True)
+  event = CharField(widget=widgets.HiddenInput, required=True)
+  maxpurchases = DecimalField(max_digits=8, required=True)
+    
+
+
