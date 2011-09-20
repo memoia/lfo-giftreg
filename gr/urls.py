@@ -10,6 +10,7 @@ urlpatterns = patterns('gr.views',
     (r'^event/add/$', 'event_edit'),
     (r'^event/edit/(?P<event_id>\d+)/$', 'event_edit'),
     (r'^event/edit/(?P<event_id>\d+)/(?P<remove_flag>del)/$', 'event_edit'),
+    (r'^event/view/(?P<event_id>\d+)/$', 'event_view'),
 
     (r'^wishlist/$', 'wishlist_index'),
     (r'^wishlist/(?P<user_id>\d+)/$', 'wishlist_list'),

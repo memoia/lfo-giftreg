@@ -20,7 +20,10 @@
   {% for e in events %}
   <tr>
     <td><a href="edit/{{ e.id }}/del">X</a></td>
-    <td><a href="edit/{{ e.id }}">{{ e.name }}</a></td>
+    <td>
+      <a href="view/{{ e.id }}">{{ e.name }}</a>
+      (<a href="edit/{{e.id}}">Edit</a>)
+    </td>
     <td>{{ e.recipient }}</td>
     <td>{{ e.date }}</td>
     <td>{{ e.time_start }} - {{ e.time_end }}</td>

@@ -1,0 +1,54 @@
+{% extends "gr/main.html" %}
+
+{% block title %}Gift Registry: Event Viewer{% endblock %}
+{% block head %}
+{% endblock %}
+
+{% block content %}
+<h1>Event Viewer</h1>
+
+<table class="simple">
+  <tr>
+    <th>Host</th>
+    <td>{{ event.recipient.username }}</td>
+  </tr>
+  <tr>
+    <th>Date / Time</th>
+    <td>{{ event.date }} {{ event.time_start }} {{ event.time_end }}</td>
+  </tr>
+  <tr>
+    <th>Name</th>
+    <td>{{ event.name }}</td>
+  </tr>
+  <tr>
+    <th>Location</th>
+    <td>{{ event.location }} <small>{{ event.details }}</small></td>
+  </tr>
+  <tr>
+    <th>Invited</th>
+    <td>{{ event.attendees.all|join:", " }}</td>
+  </tr>
+</table>
+
+
+<div>
+<h2>For recipient...</h2>
+<ol>
+  <li><a href="{% url gr.views.wishlist_list event.recipient.id %}">Specify Gifts</a></li>
+  <li><a href="{% url gr.views.event_edit event.id %}">Edit Event/Attendee List</a></li>
+  <li>Notify Attendees</li>
+</ol>
+</div>
+
+
+<div>
+<h2>For attendees...</h2>
+<ol>
+  <li>Specify Budget</li>
+  <li>Select Gifts</li>
+</ol>
+</div>
+
+{% endblock %}
+
+
