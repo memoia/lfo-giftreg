@@ -9,9 +9,9 @@
   <tr>
     <th>Recipient</th>
   </tr>
-  {% for w in wishlist %}
+  {% for w in wishlists %}
   <tr>
-    <td><a href="wishlist/{{ w.recipient.id }}/">{{ w.recipient }}</a></td>
+    <td><a href="{{ w.recipient }}/">{{ w.recipient }}</a></td>
   </tr>
   {% endfor %}
 </table>

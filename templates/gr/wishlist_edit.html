@@ -1,0 +1,24 @@
+{% extends "gr/main.html" %}
+
+{% block title %}Gift Registry: Wishlist Gift Editor{% endblock %}
+{% block head %}
+{% endblock %}
+
+{% block content %}
+<h1>Wishlist Gift Editor</h1>
+
+{% if form.errors %}
+<div class='warning'>
+  Data could not be saved.
+</div>
+{% endif %}
+
+<form method="post">
+{% csrf_token %}
+{{ form.as_p }}
+<input type="submit" value="Save" />
+</form>
+
+{% endblock %}
+
+

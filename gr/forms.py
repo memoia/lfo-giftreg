@@ -65,3 +65,17 @@ class EventForm(ModelForm):
     self.fields['time_end'].widget = AdminTimeWidget()
   """
 
+
+
+class RecipientWishListWithGiftForm(Form):
+  wishlist_recipient = IntegerField(widget=widgets.HiddenInput)
+  gift_id = IntegerField(widget=widgets.HiddenInput, required=False)
+  wishlist_id = IntegerField(widget=widgets.HiddenInput, required=False)
+  gift_name = CharField()
+  gift_value = DecimalField(max_digits=8)
+  wishlist_active = BooleanField(initial=True,required=False)
+
+
+
+
+

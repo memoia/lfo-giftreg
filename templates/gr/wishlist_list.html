@@ -1,0 +1,27 @@
+{% extends "gr/main.html" %}
+
+{% block title %}Gift Registry: {{ user.username }}'s Wishlist{% endblock %}
+{% block head %}{% endblock %}
+
+{% block content %}
+<h1>{{ user.username }}'s Wishlist</h1>
+<div>
+  <a href="add/">Add New Item</a>
+</div>
+<table class='simple'>
+  <tr>
+    <th>Active?</th>
+    <th>Item</th>
+    <th>Price</th>
+  </tr>
+  {% for w in wlist %}
+  <tr>
+    <td>{{ w.active }}</td>
+    <td><a href="edit/{{ w.id }}">{{ w.gift.name }}</a></td>
+    <td>{{ w.gift.value }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}
+
+

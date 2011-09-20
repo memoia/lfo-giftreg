@@ -67,8 +67,8 @@ class Gift(models.Model):
   name = models.CharField(max_length=255, \
 			  null=False, \
 			  blank=False, \
-			  db_index=True, \
-			  unique=True)
+			  db_index=True)
+			  #unique=True)
   value = models.DecimalField(decimal_places=2, \
 			      max_digits=8, \
 			      validators=[val_posint])
