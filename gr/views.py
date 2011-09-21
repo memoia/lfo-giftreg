@@ -9,7 +9,7 @@ from django.db.models import F, Q
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.template import RequestContext
-import datetime
+import datetime, string
 from gr.models import *
 from gr.forms import *
 
@@ -39,7 +39,7 @@ def event_edit(request, event_id=None, remove_flag=None):
   if remove_flag == 'del' and event_id is not None:
     # XXX should check that user deleting it is the associated rcp
     Event.objects.get(pk=event_id).delete()
-    return redirect(event_list) #HttpResponseRedirect(reverse(event_list))
+    return redirect(event_list)
 
   if request.method == 'POST':
     if len(request.POST['event_id']) > 0:
@@ -49,15 +49,31 @@ def event_edit(request, event_id=None, remove_flag=None):
     else:
       form = EventForm(request.POST)
     if form.is_valid():
-      """
-      if len(form.cleaned_data['event_id']) > 0:
-	event_id = form.cleaned_data['event_id']
-      if event_id is not None:
-	event = Event.objects.get(pk=event_id)
-	form = EventForm(request.POST, instance=event)
-      """
-      form.save()
-      return redirect(event_list) #HttpResponseRedirect(reverse(event_list))
+      event = form.save(commit=False)
+
+      others=map(string.strip,form.cleaned_data['other_attendees'].split("\n"))
+
+      for uname in others:
+	# create user account if doesn't exist
+	if len(uname) == 0: continue
+	try:
+	  u = User.objects.get(username__iexact=uname)
+	  p = u.get_profile()
+	  if p.gr_user_type != 'ATT':
+	    raise Exception('Existing user "%s" not attendee account' % uname)
+	except User.DoesNotExist:
+	  # XXX in real life we wouldn't set everyone's password to "password"
+	  u = User.objects.create_user(uname,uname,'password')
+	  p = u.get_profile()
+	  # dict([(v,k) for (k,v) in UserProfile.GR_USER_TYPES])['Attendee']
+	  p.gr_user_type = 'ATT'
+	  p.save()
+
+	# add to attendees list (this won't make duplicates)
+	event.attendees.add(u)
+
+      event.save()
+      return redirect(event_list)
 
   else:
     if event_id is not None:

@@ -4,6 +4,9 @@
 from gr.models import *
 from django.forms import *
 import datetime, time
+from django.core.validators import email_re
+
+
 
 class EventForm(ModelForm):
   class Meta:
@@ -18,26 +21,21 @@ class EventForm(ModelForm):
 		  help_text='Control-click/command-click to select multiple', \
 		  required = False)
   other_attendees = CharField(widget=Textarea, \
-		  help_text='Enter email addresses one per line (XXX THIS DOES NOT DO ANYTHING YET BUT IT SHOULD ADD NEW USER ACCOUNTS If CORRESPONDING EMAIL DOES NOT EXIST IN SYSTEM)', \
+		  help_text='Enter email addresses one per line', \
 		  required = False)
 
-  """
-  def validate_date(self, v):
-    try:
-      fmt = "%Y-%m-%d"
-      r = datetime.datetime.fromtimestamp(time.mktime(time.strptime(v, fmt)))
-    except Exception, details:
-      raise ValidationError('Date not in proper format')
-    return v
-
-  def validate_time(self, v):
-    try:
-      fmt = "%H:%M:%S"
-      r = datetime.datetime.fromtimestamp(time.mktime(time.strptime(v, fmt)))
-    except:
-      raise ValidationError('Time not in proper format')
-    return v
-  """
+  def clean_other_attendees(self):
+    oa = self.cleaned_data['other_attendees']
+    if oa is None or oa == '':
+      return oa
+    li = oa.strip().split("\n")
+    fails = []
+    for e in li:
+      if not email_re.match(e.strip()):
+	fails.append('"%s"'%e.strip())
+    if len(fails) > 0:
+      raise ValidationError('Invalid email addresses: %s' % "; ".join(fails))
+    return oa.strip()
 
   # require event date to be at least one day after today
   def validate_is_future_event(self, v):
@@ -45,6 +43,8 @@ class EventForm(ModelForm):
       return v
     raise ValidationError('Event must be after today')
 
+  # ??? why are there two ways to specify a validation function here?
+  #	i.e., via "clean_" prefix, or explicitly assigning callback?
 
   def __init__(self, *args, **kwargs):
     super(EventForm, self).__init__(*args, **kwargs)
