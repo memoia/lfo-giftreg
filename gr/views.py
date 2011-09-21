@@ -63,7 +63,6 @@ def event_edit(request, event_id=None, remove_flag=None):
 	return redirect(event_list)
 
   if remove_flag == 'del' and event_id is not None:
-    # XXX should check that user deleting it is the associated rcp
     Event.objects.get(pk=event_id).delete()
     return redirect(event_list)
 
@@ -106,7 +105,7 @@ def event_edit(request, event_id=None, remove_flag=None):
 	  # add to attendees list (this won't make duplicates)
 	  event.attendees.add(u)
 
-      return redirect(event_list)
+      return redirect(event_view, event.id)
 
   else:
     if event_id is not None:

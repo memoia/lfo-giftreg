@@ -1,0 +1,997 @@
+[
+  {
+    "pk": 13, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "attendeebudget", 
+      "name": "attendee budget", 
+      "app_label": "gr"
+    }
+  }, 
+  {
+    "pk": 14, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "attendeegifts", 
+      "name": "attendee gifts", 
+      "app_label": "gr"
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "contenttype", 
+      "name": "content type", 
+      "app_label": "contenttypes"
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "event", 
+      "name": "event", 
+      "app_label": "gr"
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "gift", 
+      "name": "gift", 
+      "app_label": "gr"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "group", 
+      "name": "group", 
+      "app_label": "auth"
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "logentry", 
+      "name": "log entry", 
+      "app_label": "admin"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "message", 
+      "name": "message", 
+      "app_label": "auth"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "permission", 
+      "name": "permission", 
+      "app_label": "auth"
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "recipientwishlist", 
+      "name": "recipient wish list", 
+      "app_label": "gr"
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "session", 
+      "name": "session", 
+      "app_label": "sessions"
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "site", 
+      "name": "site", 
+      "app_label": "sites"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "user", 
+      "name": "user", 
+      "app_label": "auth"
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+      "model": "userprofile", 
+      "name": "user profile", 
+      "app_label": "gr"
+    }
+  }, 
+  {
+    "pk": "a39df70bc620ce8e26829cf22db7f3ba", 
+    "model": "sessions.session", 
+    "fields": {
+      "expire_date": "2011-10-05 03:58:17", 
+      "session_data": "ZDBkNDc1ZTc4Y2ZlNjEzZDg3YzFkZGM1MWViNDU4M2U3OTZjZWZkMDqAAn1xAS4=\n"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "sites.site", 
+    "fields": {
+      "domain": "example.com", 
+      "name": "example.com"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "gr.userprofile", 
+    "fields": {
+      "gr_user_type": "OTH", 
+      "user": 1
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "gr.userprofile", 
+    "fields": {
+      "gr_user_type": "RCP", 
+      "user": 2
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "gr.userprofile", 
+    "fields": {
+      "gr_user_type": "RCP", 
+      "user": 3
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "gr.userprofile", 
+    "fields": {
+      "gr_user_type": "ATT", 
+      "user": 4
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "gr.userprofile", 
+    "fields": {
+      "gr_user_type": "ATT", 
+      "user": 5
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "gr.userprofile", 
+    "fields": {
+      "gr_user_type": "ATT", 
+      "user": 6
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "gr.userprofile", 
+    "fields": {
+      "gr_user_type": "ATT", 
+      "user": 7
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "gr.event", 
+    "fields": {
+      "time_start": null, 
+      "name": "Rose's First Event", 
+      "time_end": null, 
+      "location": "Lake house", 
+      "date": "2012-05-07", 
+      "attendees": [
+        5, 
+        7
+      ], 
+      "recipient": 3, 
+      "details": ""
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "gr.event", 
+    "fields": {
+      "time_start": "15:00:00", 
+      "name": "Richard's Second Event", 
+      "time_end": null, 
+      "location": "Down by the river (again)", 
+      "date": "2012-05-06", 
+      "attendees": [
+        4, 
+        5, 
+        6
+      ], 
+      "recipient": 2, 
+      "details": ""
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "gr.gift", 
+    "fields": {
+      "name": "Carnation", 
+      "value": "5"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "gr.gift", 
+    "fields": {
+      "name": "Tulip", 
+      "value": "10"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "gr.gift", 
+    "fields": {
+      "name": "Jasmine", 
+      "value": "15"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "gr.gift", 
+    "fields": {
+      "name": "Impatient", 
+      "value": "20.01"
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "gr.gift", 
+    "fields": {
+      "name": "Iris", 
+      "value": "100.99"
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "gr.gift", 
+    "fields": {
+      "name": "ATV", 
+      "value": "50"
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "gr.gift", 
+    "fields": {
+      "name": "Motorcycle", 
+      "value": "60"
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "gr.gift", 
+    "fields": {
+      "name": "Jeep", 
+      "value": "70"
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "gr.gift", 
+    "fields": {
+      "name": "Boat", 
+      "value": "80"
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "gr.gift", 
+    "fields": {
+      "name": "Rocket", 
+      "value": "543.21"
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "gr.gift", 
+    "fields": {
+      "name": "Batmobile", 
+      "value": "12345.67"
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "gr.gift", 
+    "fields": {
+      "name": "Airplane", 
+      "value": "22334.56"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "gr.recipientwishlist", 
+    "fields": {
+      "active": true, 
+      "recipient": 3, 
+      "gift": 1
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "gr.recipientwishlist", 
+    "fields": {
+      "active": true, 
+      "recipient": 3, 
+      "gift": 2
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "gr.recipientwishlist", 
+    "fields": {
+      "active": true, 
+      "recipient": 3, 
+      "gift": 3
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "gr.recipientwishlist", 
+    "fields": {
+      "active": true, 
+      "recipient": 3, 
+      "gift": 4
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "gr.recipientwishlist", 
+    "fields": {
+      "active": true, 
+      "recipient": 3, 
+      "gift": 5
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "gr.recipientwishlist", 
+    "fields": {
+      "active": true, 
+      "recipient": 2, 
+      "gift": 6
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "gr.recipientwishlist", 
+    "fields": {
+      "active": true, 
+      "recipient": 2, 
+      "gift": 7
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "gr.recipientwishlist", 
+    "fields": {
+      "active": true, 
+      "recipient": 2, 
+      "gift": 8
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "gr.recipientwishlist", 
+    "fields": {
+      "active": true, 
+      "recipient": 2, 
+      "gift": 9
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "gr.recipientwishlist", 
+    "fields": {
+      "active": true, 
+      "recipient": 2, 
+      "gift": 10
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "gr.recipientwishlist", 
+    "fields": {
+      "active": true, 
+      "recipient": 2, 
+      "gift": 11
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "gr.recipientwishlist", 
+    "fields": {
+      "active": true, 
+      "recipient": 2, 
+      "gift": 12
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "gr.attendeebudget", 
+    "fields": {
+      "maxpurchases": "100", 
+      "attendee": 5, 
+      "event": 2
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "gr.attendeebudget", 
+    "fields": {
+      "maxpurchases": "5000", 
+      "attendee": 5, 
+      "event": 3
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "gr.attendeegifts", 
+    "fields": {
+      "attendee": 5, 
+      "event": 2, 
+      "gift": 4
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "gr.attendeegifts", 
+    "fields": {
+      "attendee": 5, 
+      "event": 3, 
+      "gift": 9
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "gr.attendeegifts", 
+    "fields": {
+      "attendee": 5, 
+      "event": 3, 
+      "gift": 10
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "gr.attendeegifts", 
+    "fields": {
+      "attendee": 4, 
+      "event": 3, 
+      "gift": 12
+    }
+  }, 
+  {
+    "pk": 22, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_logentry", 
+      "name": "Can add log entry", 
+      "content_type": 8
+    }
+  }, 
+  {
+    "pk": 23, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_logentry", 
+      "name": "Can change log entry", 
+      "content_type": 8
+    }
+  }, 
+  {
+    "pk": 24, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_logentry", 
+      "name": "Can delete log entry", 
+      "content_type": 8
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_group", 
+      "name": "Can add group", 
+      "content_type": 2
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_group", 
+      "name": "Can change group", 
+      "content_type": 2
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_group", 
+      "name": "Can delete group", 
+      "content_type": 2
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_message", 
+      "name": "Can add message", 
+      "content_type": 4
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_message", 
+      "name": "Can change message", 
+      "content_type": 4
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_message", 
+      "name": "Can delete message", 
+      "content_type": 4
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_permission", 
+      "name": "Can add permission", 
+      "content_type": 1
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_permission", 
+      "name": "Can change permission", 
+      "content_type": 1
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_permission", 
+      "name": "Can delete permission", 
+      "content_type": 1
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_user", 
+      "name": "Can add user", 
+      "content_type": 3
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_user", 
+      "name": "Can change user", 
+      "content_type": 3
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_user", 
+      "name": "Can delete user", 
+      "content_type": 3
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_contenttype", 
+      "name": "Can add content type", 
+      "content_type": 5
+    }
+  }, 
+  {
+    "pk": 14, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_contenttype", 
+      "name": "Can change content type", 
+      "content_type": 5
+    }
+  }, 
+  {
+    "pk": 15, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_contenttype", 
+      "name": "Can delete content type", 
+      "content_type": 5
+    }
+  }, 
+  {
+    "pk": 37, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_attendeebudget", 
+      "name": "Can add attendee budget", 
+      "content_type": 13
+    }
+  }, 
+  {
+    "pk": 38, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_attendeebudget", 
+      "name": "Can change attendee budget", 
+      "content_type": 13
+    }
+  }, 
+  {
+    "pk": 39, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_attendeebudget", 
+      "name": "Can delete attendee budget", 
+      "content_type": 13
+    }
+  }, 
+  {
+    "pk": 40, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_attendeegifts", 
+      "name": "Can add attendee gifts", 
+      "content_type": 14
+    }
+  }, 
+  {
+    "pk": 41, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_attendeegifts", 
+      "name": "Can change attendee gifts", 
+      "content_type": 14
+    }
+  }, 
+  {
+    "pk": 42, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_attendeegifts", 
+      "name": "Can delete attendee gifts", 
+      "content_type": 14
+    }
+  }, 
+  {
+    "pk": 28, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_event", 
+      "name": "Can add event", 
+      "content_type": 10
+    }
+  }, 
+  {
+    "pk": 29, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_event", 
+      "name": "Can change event", 
+      "content_type": 10
+    }
+  }, 
+  {
+    "pk": 30, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_event", 
+      "name": "Can delete event", 
+      "content_type": 10
+    }
+  }, 
+  {
+    "pk": 31, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_gift", 
+      "name": "Can add gift", 
+      "content_type": 11
+    }
+  }, 
+  {
+    "pk": 32, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_gift", 
+      "name": "Can change gift", 
+      "content_type": 11
+    }
+  }, 
+  {
+    "pk": 33, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_gift", 
+      "name": "Can delete gift", 
+      "content_type": 11
+    }
+  }, 
+  {
+    "pk": 34, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_recipientwishlist", 
+      "name": "Can add recipient wish list", 
+      "content_type": 12
+    }
+  }, 
+  {
+    "pk": 35, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_recipientwishlist", 
+      "name": "Can change recipient wish list", 
+      "content_type": 12
+    }
+  }, 
+  {
+    "pk": 36, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_recipientwishlist", 
+      "name": "Can delete recipient wish list", 
+      "content_type": 12
+    }
+  }, 
+  {
+    "pk": 25, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_userprofile", 
+      "name": "Can add user profile", 
+      "content_type": 9
+    }
+  }, 
+  {
+    "pk": 26, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_userprofile", 
+      "name": "Can change user profile", 
+      "content_type": 9
+    }
+  }, 
+  {
+    "pk": 27, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_userprofile", 
+      "name": "Can delete user profile", 
+      "content_type": 9
+    }
+  }, 
+  {
+    "pk": 16, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_session", 
+      "name": "Can add session", 
+      "content_type": 6
+    }
+  }, 
+  {
+    "pk": 17, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_session", 
+      "name": "Can change session", 
+      "content_type": 6
+    }
+  }, 
+  {
+    "pk": 18, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_session", 
+      "name": "Can delete session", 
+      "content_type": 6
+    }
+  }, 
+  {
+    "pk": 19, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "add_site", 
+      "name": "Can add site", 
+      "content_type": 7
+    }
+  }, 
+  {
+    "pk": 20, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "change_site", 
+      "name": "Can change site", 
+      "content_type": 7
+    }
+  }, 
+  {
+    "pk": 21, 
+    "model": "auth.permission", 
+    "fields": {
+      "codename": "delete_site", 
+      "name": "Can delete site", 
+      "content_type": 7
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "auth.user", 
+    "fields": {
+      "username": "imm", 
+      "first_name": "", 
+      "last_name": "", 
+      "is_active": true, 
+      "is_superuser": true, 
+      "is_staff": true, 
+      "last_login": "2011-09-21 03:38:40", 
+      "groups": [], 
+      "user_permissions": [], 
+      "password": "sha1$2b527$a33309f200aa240bf4586259f83d92e3717dbbf0", 
+      "email": "melnick@gmail.com", 
+      "date_joined": "2011-09-21 03:37:42"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "auth.user", 
+    "fields": {
+      "username": "richard@foo.bar", 
+      "first_name": "", 
+      "last_name": "", 
+      "is_active": true, 
+      "is_superuser": false, 
+      "is_staff": false, 
+      "last_login": "2011-09-21 03:50:17", 
+      "groups": [], 
+      "user_permissions": [], 
+      "password": "sha1$19b34$abc430dee0e557a86863e15ecb56a6efa0790154", 
+      "email": "richard@foo.bar", 
+      "date_joined": "2011-09-21 03:41:54"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "auth.user", 
+    "fields": {
+      "username": "rose@foo.bar", 
+      "first_name": "", 
+      "last_name": "", 
+      "is_active": true, 
+      "is_superuser": false, 
+      "is_staff": false, 
+      "last_login": "2011-09-21 03:44:34", 
+      "groups": [], 
+      "user_permissions": [], 
+      "password": "sha1$5d58b$458cfa87285bb949e7d887d10f9541c8e9f5bcfe", 
+      "email": "rose@foo.bar", 
+      "date_joined": "2011-09-21 03:42:05"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "auth.user", 
+    "fields": {
+      "username": "alex@foo.bar", 
+      "first_name": "", 
+      "last_name": "", 
+      "is_active": true, 
+      "is_superuser": false, 
+      "is_staff": false, 
+      "last_login": "2011-09-21 03:57:13", 
+      "groups": [], 
+      "user_permissions": [], 
+      "password": "sha1$79490$9e5b8f87bdf4fdf4b1b518d4ca8f84a2653b229e", 
+      "email": "alex@foo.bar", 
+      "date_joined": "2011-09-21 03:44:09"
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "auth.user", 
+    "fields": {
+      "username": "ann@foo.bar", 
+      "first_name": "", 
+      "last_name": "", 
+      "is_active": true, 
+      "is_superuser": false, 
+      "is_staff": false, 
+      "last_login": "2011-09-21 03:57:43", 
+      "groups": [], 
+      "user_permissions": [], 
+      "password": "sha1$2d1ed$7ba2d739028b10bc0994b9c4831bd561f02efd69", 
+      "email": "ann@foo.bar", 
+      "date_joined": "2011-09-21 03:44:09"
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "auth.user", 
+    "fields": {
+      "username": "adam@foo.bar", 
+      "first_name": "", 
+      "last_name": "", 
+      "is_active": true, 
+      "is_superuser": false, 
+      "is_staff": false, 
+      "last_login": "2011-09-21 03:44:10", 
+      "groups": [], 
+      "user_permissions": [], 
+      "password": "sha1$05f14$049620784266f7320ac7bd48cfacc328d8d79b03", 
+      "email": "adam@foo.bar", 
+      "date_joined": "2011-09-21 03:44:10"
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "auth.user", 
+    "fields": {
+      "username": "amy@foo.bar", 
+      "first_name": "", 
+      "last_name": "", 
+      "is_active": true, 
+      "is_superuser": false, 
+      "is_staff": false, 
+      "last_login": "2011-09-21 03:45:21", 
+      "groups": [], 
+      "user_permissions": [], 
+      "password": "sha1$abd2b$9993c05bb585f4ef317cdd18dbfb95c277212f65", 
+      "email": "amy@foo.bar", 
+      "date_joined": "2011-09-21 03:45:21"
+    }
+  }
+]
