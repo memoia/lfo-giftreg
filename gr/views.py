@@ -9,33 +9,59 @@ from django.db.models import F, Q
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.template import RequestContext
+from django.contrib.auth.decorators import login_required
+from django.conf import settings
+from django.forms import *
 import datetime, string
 from gr.models import *
 from gr.forms import *
 
-"""
-from django.core.mail import send_mail
-send_mail(subject, message, sender, recipients)
-"""
 
 
 def index(request):
-  return render_to_response('gr/main.html', {})
+  return render_to_response('gr/main.html', {}, RequestContext(request))
 
 
+@login_required
 def event_list(request):
   events=Event.objects.filter(date__gte=datetime.datetime.now()) \
 					    .select_related(depth=1)
-  return render_to_response('gr/event_list.html', {'events':events}, context_instance=RequestContext(request))
+  if not (settings.GODMODE and request.user.id==1):
+    if request.user.get_profile().is_recipient():
+      events = events.filter(recipient = request.user)
+    elif request.user.get_profile().is_attendee():
+      events = events.filter(attendees = request.user)
+    
+  return render_to_response('gr/event_list.html', \
+	    {'events':events}, \
+	    context_instance=RequestContext(request))
 
+@login_required
 def event_view(request, event_id):
   try:
     event = Event.objects.select_related(depth=1).get(pk=event_id)
   except Event.DoesNotExist:
     return redirect(event_list)
-  return render_to_response('gr/event_view.html', {'event':event, 'user':request.user})
 
+  if not (settings.GODMODE and request.user.id==1):
+    utype = request.user.get_profile().gr_user_type
+  else:
+    utype = 'ALL'
+
+  return render_to_response('gr/event_view.html', \
+	    {'event':event, 'user':request.user, 'utype':utype}, \
+	    context_instance=RequestContext(request))
+
+@login_required
 def event_edit(request, event_id=None, remove_flag=None):
+  if not (settings.GODMODE and request.user.id==1):
+    if not request.user.get_profile().is_recipient():
+      return redirect(event_list)
+    if event_id is not None:
+      e = Event.objects.get(pk=event_id)
+      if request.user != e.recipient:
+	return redirect(event_list)
+
   if remove_flag == 'del' and event_id is not None:
     # XXX should check that user deleting it is the associated rcp
     Event.objects.get(pk=event_id).delete()
@@ -51,28 +77,35 @@ def event_edit(request, event_id=None, remove_flag=None):
     if form.is_valid():
       event = form.save(commit=False)
 
-      others=map(string.strip,form.cleaned_data['other_attendees'].split("\n"))
-
-      for uname in others:
-	# create user account if doesn't exist
-	if len(uname) == 0: continue
-	try:
-	  u = User.objects.get(username__iexact=uname)
-	  p = u.get_profile()
-	  if p.gr_user_type != 'ATT':
-	    raise Exception('Existing user "%s" not attendee account' % uname)
-	except User.DoesNotExist:
-	  # XXX in real life we wouldn't set everyone's password to "password"
-	  u = User.objects.create_user(uname,uname,'password')
-	  p = u.get_profile()
-	  # dict([(v,k) for (k,v) in UserProfile.GR_USER_TYPES])['Attendee']
-	  p.gr_user_type = 'ATT'
-	  p.save()
-
-	# add to attendees list (this won't make duplicates)
-	event.attendees.add(u)
+      if not (settings.GODMODE and request.user.id==1):
+	if event.recipient != request.user:
+	  raise Exception("You can't set a recipient other than yourself")
 
       event.save()
+      form.save_m2m()
+
+      others=map(string.strip,form.cleaned_data['other_attendees'].split("\n"))
+
+      if len(others) > 0:
+	for uname in others:
+	  # create user account if doesn't exist
+	  if len(uname) == 0: continue
+	  try:
+	    u = User.objects.get(username__iexact=uname)
+	    p = u.get_profile()
+	    if p.gr_user_type != 'ATT':
+	      raise Exception('Existing user "%s" not attendee account' % uname)
+	  except User.DoesNotExist:
+	    # XXX in real life we wouldn't set everyone's password to "password"
+	    u = User.objects.create_user(uname,uname,'password')
+	    p = u.get_profile()
+	    # dict([(v,k) for (k,v) in UserProfile.GR_USER_TYPES])['Attendee']
+	    p.gr_user_type = 'ATT'
+	    p.save()
+
+	  # add to attendees list (this won't make duplicates)
+	  event.attendees.add(u)
+
       return redirect(event_list)
 
   else:
@@ -84,21 +117,37 @@ def event_edit(request, event_id=None, remove_flag=None):
       form = EventForm(instance=event)
     else:
       form = EventForm()
+      if request.user.get_profile().is_recipient():
+	form.fields['recipient'].initial = request.user
+	#form.fields['recipient'].widget = widgets.MultipleHiddenInput
+	# XXX this doesn't hide the select....
   form_fields = {'form':form,'event_id':event_id}
   form_fields.update(csrf(request))
-  return render_to_response('gr/event_edit.html', form_fields)
+  return render_to_response('gr/event_edit.html', \
+	    form_fields, \
+	    context_instance=RequestContext(request))
 
 
 
 
 
+@login_required
 def wishlist_index(request):
   wishlists=RecipientWishList.objects \
 		  .values('recipient') \
 		  .distinct()
-  return render_to_response('gr/wishlist_index.html', {'wishlists':wishlists})
+  return render_to_response('gr/wishlist_index.html', \
+	    {'wishlists':wishlists}, \
+	    context_instance=RequestContext(request))
 
+@login_required
 def wishlist_list(request, user_id=None):
+  if not (settings.GODMODE and request.user.id==1):
+    if not request.user.get_profile().is_recipient():
+      return redirect(event_list)
+    elif str(request.user.id) != user_id:
+      return redirect(wishlist_list, request.user.id)
+
   try:
     u = User.objects.get(pk=user_id)
   except User.DoesNotExist:
@@ -107,10 +156,19 @@ def wishlist_list(request, user_id=None):
   # TODO it would be nice to left-join the attendeegifts
   #	 table somehow so that we could show if an item
   #	 has been selected by an attendee.
-  wlist = RecipientWishList.objects.filter(recipient=u).select_related(depth=1)
-  return render_to_response('gr/wishlist_list.html', {'wlist':wlist, 'user':u})
+  wlist=RecipientWishList.objects.filter(recipient=u).select_related(depth=1)
+  return render_to_response('gr/wishlist_list.html', \
+	    {'wlist':wlist, 'user':u}, \
+	    context_instance=RequestContext(request))
 
+@login_required
 def wishlist_edit(request, user_id, wishlist_id=None):
+  if not (settings.GODMODE and request.user.id==1):
+    if not request.user.get_profile().is_recipient():
+      return redirect(event_list)
+    elif str(request.user.id) != user_id:
+      return redirect(wishlist_list, request.user.id)
+
   if request.method == 'POST':
     form = RecipientWishListWithGiftForm(request.POST)
     if form.is_valid():
@@ -150,22 +208,21 @@ def wishlist_edit(request, user_id, wishlist_id=None):
 
   form_fields = {'form':form,'user_id':user_id}
   form_fields.update(csrf(request))
-  return render_to_response('gr/wishlist_edit.html', form_fields)
+  return render_to_response('gr/wishlist_edit.html', \
+	    form_fields, \
+	    context_instance=RequestContext(request))
 
 
 
 
 
+@login_required
 def attendee_budget_edit(request, attendee_id, event_id):
+  if not (settings.GODMODE and request.user.id==1):
+    if not request.user.get_profile().is_attendee() \
+		or str(request.user.id) != attendee_id:
+      return redirect(event_view, event_id)
 
-  # ensure a budget can't be modified for an attendee
-  # who isn't invited to the specified event (only if
-  # sessions are working to make quick checks easier...)
-  if request.user.id is not None:
-    try:
-      t=Event.objects.get(id__exact=event_id, attendees__id__exact=attendee_id)
-    except Event.DoesNotExist:
-      return redirect(event_view, event_id=event_id)
 
   def _get_budget(event_id, attendee_id):
     return AttendeeBudget.objects.get( \
@@ -190,11 +247,13 @@ def attendee_budget_edit(request, attendee_id, event_id):
 	  b.delete()
 	except AssertionError:
 	  pass
-      return redirect(event_view, event_id=e) 
+      return redirect(attendee_gifts_list, attendee_id=attendee_id, event_id=e) 
     else:
       form_fields = {'form':form}
       form_fields.update(csrf(request))
-      return render_to_response('gr/attendee_budget_edit.html', form_fields)
+      return render_to_response('gr/attendee_budget_edit.html', \
+		form_fields, \
+		context_instance=RequestContext(request))
 
   else:
     d = {'attendee':attendee_id,'event':event_id}
@@ -206,11 +265,18 @@ def attendee_budget_edit(request, attendee_id, event_id):
     form = AttendeeBudgetForm(initial=d)
     form_fields = {'form':form}
     form_fields.update(csrf(request))
-    return render_to_response('gr/attendee_budget_edit.html', form_fields)
+    return render_to_response('gr/attendee_budget_edit.html', \
+	      form_fields, \
+	      context_instance=RequestContext(request))
 
 
 
+@login_required
 def attendee_gifts_list(request, attendee_id, event_id):
+  if not (settings.GODMODE and request.user.id==1):
+    if not request.user.get_profile().is_attendee() \
+		or str(request.user.id) != attendee_id:
+      return redirect(event_view, event_id)
 
   # I hope there's a better way to do this....
   event = Event.objects.get(pk=event_id)
@@ -253,7 +319,9 @@ def attendee_gifts_list(request, attendee_id, event_id):
 	, 'event_id':event_id
       }
       form_fields.update(csrf(request))
-      return render_to_response('gr/attendee_gifts_list.html', form_fields)
+      return render_to_response('gr/attendee_gifts_list.html', \
+		form_fields, \
+		context_instance=RequestContext(request))
 
   form = AttendeeGiftsForm(initial={'event':event_id,'attendee':attendee_id})
   form.fields['gifts'].choices = gift_choices
@@ -266,7 +334,20 @@ def attendee_gifts_list(request, attendee_id, event_id):
     , 'event_id':event_id
   }
   form_fields.update(csrf(request))
-  return render_to_response('gr/attendee_gifts_list.html', form_fields)
+  return render_to_response('gr/attendee_gifts_list.html', \
+	    form_fields, \
+	    context_instance=RequestContext(request))
+
+
+@login_required
+def attendee_notify(request, event_id):
+  """
+  from django.core.mail import send_mail
+  send_mail(subject, message, sender, recipients)
+  """
+  return render_to_response('gr/attendee_notify.html', \
+	    context_instance=RequestContext(request))
+
 
 
 
@@ -302,10 +383,18 @@ def auth_register(request):
 
   page_vars = {'form':form, 'messages':messages}
   page_vars.update(csrf(request))
-  return render_to_response('gr/auth_register.html', page_vars)
+  return render_to_response('gr/auth_register.html', \
+	    page_vars, \
+	    context_instance=RequestContext(request))
 
 
-def auth_login(request):
+def auth_login(request, gmflag=None):
+  if settings.GODMODE and gmflag=='imm':
+    u = User.objects.get(pk=1)
+    u.backend = 'django.contrib.auth.backends.ModelBackend'
+    login(request, u)
+    return redirect(event_list)
+
   messages = []
 
   if request.method == 'POST':
@@ -324,7 +413,9 @@ def auth_login(request):
 
   page_vars = {'form':form, 'messages':messages}
   page_vars.update(csrf(request))
-  return render_to_response('gr/auth_login.html', page_vars)
+  return render_to_response('gr/auth_login.html', \
+	    page_vars, \
+	    context_instance=RequestContext(request))
 
 
 def auth_logout(request):

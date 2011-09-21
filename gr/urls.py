@@ -11,6 +11,7 @@ urlpatterns = patterns('gr.views',
     (r'^event/edit/(?P<event_id>\d+)/$', 'event_edit'),
     (r'^event/edit/(?P<event_id>\d+)/(?P<remove_flag>del)/$', 'event_edit'),
     (r'^event/view/(?P<event_id>\d+)/$', 'event_view'),
+    (r'^event/notify/(?P<event_id>\d+)/$', 'attendee_notify'),
 
     (r'^wishlist/$', 'wishlist_index'),
     (r'^wishlist/(?P<user_id>\d+)/$', 'wishlist_list'),
@@ -24,6 +25,10 @@ urlpatterns = patterns('gr.views',
     (r'^auth/register/$', 'auth_register'),
     (r'^auth/login/$', 'auth_login'),
     (r'^auth/logout/$', 'auth_logout'),
+
+    # log in as imm user, which is hardcoded to ignore user roles
+    # (for testing/demonstration....)
+    (r'^auth/login/(?P<gmflag>imm)/$', 'auth_login'),
 
     #(r'^(?P<pk>\d+)/$', 'ummmm'),
 )

@@ -8,7 +8,14 @@ SITE_PATH = os.path.dirname(os.path.abspath(__file__))
 
 AUTH_PROFILE_MODULE = 'gr.UserProfile'
 
+LOGIN_URL = '/gr/auth/login'
+
 PUBLIC_ROOT = SITE_PATH + '/public'
+
+# enable "god mode" via /gr/auth/login/imm
+GODMODE = True
+
+
 
 
 # Django settings for giftreg project.

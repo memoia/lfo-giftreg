@@ -1,0 +1,30 @@
+{% extends "gr/main.html" %}
+
+{% block title %}Gift Registry: Notify Attendees{% endblock %}
+{% block head %}
+{% endblock %}
+
+{% block content %}
+<h1>Notify Attendees</h1>
+
+<p>
+  The idea here is to have a form for writing an email to all
+  attendees of a given event, informing them to come to this site.
+  Automatically-created users would receive an additional blurb
+  containing their initial password (which for now is just 
+  "password" sans-quotes).
+</p>
+<p>
+  Emailing a notification wasn't explicitly part of the spec so 
+  it's omitted for now.
+</p>
+<p>
+  Constant passwords are bad, and storing generated passwords 
+  is also bad. Most likely would have to re-work this a bit 
+  to send an email notification to newly created accounts as 
+  they were created w/ initial password..
+</p>
+
+{% endblock %}
+
+

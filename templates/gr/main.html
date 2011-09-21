@@ -47,7 +47,7 @@
   <div id="menu_right">
     <h1>Menu</h1>
     <ul>
-      {% if request.session %}
+      {% if request.session and request.user.id > 0 %}
       <li>
 	<a href="{% url gr.views.auth_logout %}">Logout
 	({{request.user.id}}/{{request.user.get_profile.gr_user_type}})</a>

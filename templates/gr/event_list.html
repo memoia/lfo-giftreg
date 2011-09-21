@@ -14,12 +14,16 @@ Logged in as: {{ request.user }}
 
 {% block content %}
 <h1>Event List</h1>
+{% if not request.user.get_profile.is_attendee %}
 <div>
   <a href="add/">Create New Event</a>
 </div>
+{% endif %}
 <table class='simple'>
   <tr>
+    {% if not request.user.get_profile.is_attendee %}
     <th>rm</th>
+    {% endif %}
     <th>Name</th>
     <th>Host</th>
     <th>Date</th>
@@ -28,10 +32,14 @@ Logged in as: {{ request.user }}
   </tr>
   {% for e in events %}
   <tr>
+    {% if not request.user.get_profile.is_attendee %}
     <td><a href="edit/{{ e.id }}/del">X</a></td>
+    {% endif %}
     <td>
       <a href="view/{{ e.id }}">{{ e.name }}</a>
+      {% if not request.user.get_profile.is_attendee %}
       (<a href="edit/{{e.id}}">Edit</a>)
+      {% endif %}
     </td>
     <td>{{ e.recipient }}</td>
     <td>{{ e.date }}</td>

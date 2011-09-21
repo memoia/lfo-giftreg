@@ -31,16 +31,19 @@
 </table>
 
 
+{% if utype == 'ALL' or utype == 'RCP' %}
 <div>
 <h2>For recipient...</h2>
 <ol>
   <li><a href="{% url gr.views.wishlist_list event.recipient.id %}">Specify Gifts</a></li>
   <li><a href="{% url gr.views.event_edit event.id %}">Edit Event/Attendee List</a></li>
-  <li>Notify Attendees</li>
+  <li><a href="{% url gr.views.attendee_notify event.id %}">Notify Attendees</a></li>
 </ol>
 </div>
+{% endif %}
 
 
+{% if utype == 'ALL' or utype == 'ATT' %}
 <div>
 <h2>For attendees...</h2>
 <ol>
@@ -48,6 +51,7 @@
   <li><a href="{% url gr.views.attendee_gifts_list user.id|default:1 event.id %}">Select Gifts</a></li>
 </ol>
 </div>
+{% endif %}
 
 {% endblock %}
 
