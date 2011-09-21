@@ -13,9 +13,18 @@
 </div>
 {% endif %}
 
+<div>
+{% if budget %}
+Your <a href="{% url gr.views.attendee_budget_edit attendee_id event_id %}">budget</a> for this event is: ${{ budget }}.
+{% else %}
+You have not yet specified a budget for this event. <a href="{% url gr.views.attendee_budget_edit attendee_id event_id %}">Feel stingy</a>.
+{% endif %}
+</div>
+
 <form method="post">
 {% csrf_token %}
 {{ form.as_p }}
+<input type="hidden" name="budget" value="{{ budget|default:"" }}" />
 <input type="submit" value="Save" />
 </form>
 

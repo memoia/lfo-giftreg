@@ -1,0 +1,26 @@
+{% extends "gr/main.html" %}
+
+{% block title %}Gift Registry: Register as New User{% endblock %}
+{% block head %}{% endblock %}
+
+{% block content %}
+<h1>Register</h1>
+
+{% if form.errors or messages|length > 0 %}
+<div class='warning'>
+  Sorry, there was a problem registering.
+  {% for m in messages %}
+  <br />{{ m }}
+  {% endfor %}
+</div>
+{% endif %}
+
+
+<form method="post">
+{% csrf_token %}
+{{ form.as_p }}
+<input type="submit" value="Go" />
+</form>
+{% endblock %}
+
+

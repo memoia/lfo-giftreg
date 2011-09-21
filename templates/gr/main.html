@@ -19,7 +19,9 @@
 <body> 
 
   <div id="top">
+    {% block top %}
     Top
+    {% endblock %}
   </div>
 
   <div id="content">
@@ -45,7 +47,17 @@
   <div id="menu_right">
     <h1>Menu</h1>
     <ul>
-      <li>Register/Auth</li>
+      {% if request.session %}
+      <li>
+	<a href="{% url gr.views.auth_logout %}">Logout
+	({{request.user.id}}/{{request.user.get_profile.gr_user_type}})</a>
+      </li>
+      {% else %}
+      <li>
+	<a href="{% url gr.views.auth_login %}">Login</a> / 
+	<a href="{% url gr.views.auth_register %}">Register</a>
+      </li>
+      {% endif %}
       <li><a href="{% url gr.views.event_list %}">Event List</a></li>
       <li>menu3</li>
     </ul>

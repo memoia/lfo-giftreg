@@ -124,16 +124,46 @@ class AttendeeBudget(models.Model):
 	raise Exception('Budget for this attendee/event already exists')
     except AttendeeBudget.DoesNotExist:
       pass
+
+    # prevent reducing budget if selected gifts' value exceed new maxpurchases
+    a = AttendeeGifts.objects.sum_gifts(self.attendee, self.event)
+    if a > self.maxpurchases:
+      raise Exception('Sum of value of selected gifts exceeds new budget')
+
     return super(AttendeeBudget, self).save(*args, **kwargs)
 
 
+class AttendeeGiftsManager(models.Manager):
+  def sum_gifts(self,attendee,event):
+    s = AttendeeGifts.objects \
+	.filter(attendee=attendee, event=event) \
+	.aggregate(models.Sum('gift__value'))
+    a = s['gift__value__sum']
+    if a is None:
+      return 0
+    return a
+
 class AttendeeGifts(models.Model):
+  objects = AttendeeGiftsManager()
   attendee = models.ForeignKey(User)
   event = models.ForeignKey(Event)
   gift = models.ForeignKey(Gift)
 
   def save(self, *args, **kwargs):
-    # TODO prevent going over-budget
+    # prevent going over-budget
+    try:
+      b = AttendeeBudget.objects.get(attendee=self.attendee,event=self.event)
+      s = self.gift.value + AttendeeGifts.objects.sum_gifts(self.attendee, self.event)
+      if s > b.maxpurchases:
+	raise Exception('Cannot add %s as gift, would exceed budget of %s' % (self.gift, b.maxpurchases) )
+    except AttendeeBudget.DoesNotExist:
+      pass
+
     return super(AttendeeGifts, self).save(*args, **kwargs)
+
+
+
+
+
 
 

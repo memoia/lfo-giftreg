@@ -21,5 +21,9 @@ urlpatterns = patterns('gr.views',
 
     (r'^attendee/(?P<attendee_id>\d+)/gifts/(?P<event_id>\d+)/$', 'attendee_gifts_list'),
 
+    (r'^auth/register/$', 'auth_register'),
+    (r'^auth/login/$', 'auth_login'),
+    (r'^auth/logout/$', 'auth_logout'),
+
     #(r'^(?P<pk>\d+)/$', 'ummmm'),
 )

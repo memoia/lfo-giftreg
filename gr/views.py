@@ -6,10 +6,12 @@ from django.shortcuts import render_to_response, get_object_or_404, redirect
 #from django.core.urlresolvers import reverse
 from django.core.context_processors import csrf
 from django.db.models import F, Q
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+from django.template import RequestContext
 import datetime
 from gr.models import *
 from gr.forms import *
-from django.contrib.auth.models import User
 
 """
 from django.core.mail import send_mail
@@ -24,7 +26,7 @@ def index(request):
 def event_list(request):
   events=Event.objects.filter(date__gte=datetime.datetime.now()) \
 					    .select_related(depth=1)
-  return render_to_response('gr/event_list.html', {'events':events})
+  return render_to_response('gr/event_list.html', {'events':events}, context_instance=RequestContext(request))
 
 def event_view(request, event_id):
   try:
@@ -86,6 +88,9 @@ def wishlist_list(request, user_id=None):
   except User.DoesNotExist:
     return redirect(wishlist_index)
 
+  # TODO it would be nice to left-join the attendeegifts
+  #	 table somehow so that we could show if an item
+  #	 has been selected by an attendee.
   wlist = RecipientWishList.objects.filter(recipient=u).select_related(depth=1)
   return render_to_response('gr/wishlist_list.html', {'wlist':wlist, 'user':u})
 
@@ -162,7 +167,13 @@ def attendee_budget_edit(request, attendee_id, event_id):
 	b.event = Event.objects.get(pk=e)
 	b.attendee = User.objects.get(pk=a)
       b.maxpurchases = form.cleaned_data['maxpurchases']
-      b.save()
+      if b.maxpurchases > 0:
+	b.save()
+      else:
+	try:
+	  b.delete()
+	except AssertionError:
+	  pass
       return redirect(event_view, event_id=e) 
     else:
       form_fields = {'form':form}
@@ -198,6 +209,11 @@ def attendee_gifts_list(request, attendee_id, event_id):
   gift_choices = [ (x.id, x) for x in gifts ]
   gift_checked = [ x.gift.id for x in prev_selected ]
 
+  try:
+    budget = AttendeeBudget.objects.get(attendee__id=attendee_id, event=event).maxpurchases
+  except AttendeeBudget.DoesNotExist:
+    budget = None
+
   if request.method == 'POST':
 
     form = AttendeeGiftsForm(request.POST)
@@ -214,20 +230,90 @@ def attendee_gifts_list(request, attendee_id, event_id):
       return redirect(event_view, event_id)
     else:
       form.fields['gifts'].choices = gift_choices
-      form_fields = {'form':form}
+      form_fields = {
+	  'form':form
+	, 'budget':budget
+	, 'attendee_id':attendee_id
+	, 'event_id':event_id
+      }
       form_fields.update(csrf(request))
       return render_to_response('gr/attendee_gifts_list.html', form_fields)
-
 
   form = AttendeeGiftsForm(initial={'event':event_id,'attendee':attendee_id})
   form.fields['gifts'].choices = gift_choices
   form.fields['gifts'].initial = gift_checked
 
-  form_fields = {'form':form}
+  form_fields = {
+      'form':form
+    , 'budget':budget
+    , 'attendee_id':attendee_id
+    , 'event_id':event_id
+  }
   form_fields.update(csrf(request))
   return render_to_response('gr/attendee_gifts_list.html', form_fields)
 
 
+
+def auth_register(request):
+  messages = []
+
+  if request.method == 'POST':
+    form = AuthRegisterForm(request.POST)
+    if form.is_valid():
+      uname = form.cleaned_data['email']
+      passw = form.cleaned_data['password']
+      utype = form.cleaned_data['user_type']
+
+      u = None
+      try:
+	u = User.objects.get(username__iexact=uname)
+      except User.DoesNotExist:
+	pass
+
+      if u:
+	messages.append('A user with this name already exists')
+      else:
+	u = User.objects.create_user(uname,uname,passw)
+	p = u.get_profile()
+	p.gr_user_type = utype
+	p.save()
+	a = authenticate(username=uname,password=passw)
+	login(request, a)
+	return redirect(event_list)
+
+  else:
+    form = AuthRegisterForm()
+
+  page_vars = {'form':form, 'messages':messages}
+  page_vars.update(csrf(request))
+  return render_to_response('gr/auth_register.html', page_vars)
+
+
+def auth_login(request):
+  messages = []
+
+  if request.method == 'POST':
+    form = AuthLoginForm(request.POST)
+    if form.is_valid():
+      u = authenticate(username=form.cleaned_data['username'], \
+		       password=form.cleaned_data['password'] )
+      if u is not None and u.is_active:
+	login(request, u)
+	return redirect(event_list)
+      else:
+	messages.append('Could not log in with supplied credentials.')
+
+  else:
+    form = AuthLoginForm()
+
+  page_vars = {'form':form, 'messages':messages}
+  page_vars.update(csrf(request))
+  return render_to_response('gr/auth_login.html', page_vars)
+
+
+def auth_logout(request):
+  logout(request)
+  return redirect(index)
 
 
 

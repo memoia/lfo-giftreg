@@ -53,6 +53,9 @@ it might be nice to:
 * Clarify whether events are exclusive or if any attendee can choose to
   attend any available event.
 
+* Clarify the significance of the "budget" in terms of how this may
+  affect the user's ability to see certain items.
+
 
 QUESTIONS
 

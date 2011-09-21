@@ -125,16 +125,11 @@ class AttendeeBudgetTest(TestCase):
 
 
 
-"""
-class RecipientWishList(TestCase):
-  def setUp(self):
-    self.gift1 = Gift.objects.create(name='Gift One', value=1.00)
-    self.gift2 = Gift.objects.create(name='Gift Two', value=2.00)
 
-  def testAddGift(self):
-    pass
 
-  def testRemoveGift(self):
-    self.failUnlessEqual(1 + 1, 2)
-"""
+# TODO add cases for additional checks added to models/managers
+
+
+
+
 

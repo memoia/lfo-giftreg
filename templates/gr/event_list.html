@@ -3,6 +3,15 @@
 {% block title %}Gift Registry: Event List{% endblock %}
 {% block head %}{% endblock %}
 
+{% block top %}
+{% if request.session %}
+Logged in as: {{ request.user }}
+  (type: {{ request.user.get_profile.gr_user_type }})
+{% else %}
+(User not logged in)
+{% endif %}
+{% endblock %}
+
 {% block content %}
 <h1>Event List</h1>
 <div>

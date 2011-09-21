@@ -79,7 +79,7 @@ class RecipientWishListWithGiftForm(Form):
 class AttendeeBudgetForm(Form):
   attendee = IntegerField(widget=widgets.HiddenInput, required=True)
   event = IntegerField(widget=widgets.HiddenInput, required=True)
-  maxpurchases = DecimalField(max_digits=8, required=True)
+  maxpurchases = DecimalField(max_digits=8, required=True, help_text="Specify zero to have an unlimited budget")
     
 
 # could try using a modelformset for these instead...maybe next time
@@ -108,6 +108,19 @@ class AttendeeGiftsForm(Form):
 
   
 
+class AuthLoginForm(Form):
+  username = EmailField(help_text="The e-mail address you " + \
+				  "supplied on registration, or the " + \
+				  "e-mail address you received an event " + \
+				  "notification from.")
+  password = CharField(widget=widgets.PasswordInput(render_value=False))
+
+
+
+class AuthRegisterForm(Form):
+  email = EmailField()
+  password = CharField(widget=widgets.PasswordInput(render_value=False))
+  user_type = ChoiceField(choices=UserProfile.GR_USER_TYPES_CHOICES)
 
 
 
