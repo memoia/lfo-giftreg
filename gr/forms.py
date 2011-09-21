@@ -86,7 +86,7 @@ class AttendeeBudgetForm(Form):
 class AttendeeGiftsForm(Form):
   attendee = IntegerField(widget=widgets.HiddenInput, required=True)
   event = IntegerField(widget=widgets.HiddenInput, required=True)
-  gifts = MultipleChoiceField(widget=widgets.CheckboxSelectMultiple)
+  gifts = MultipleChoiceField(widget=widgets.CheckboxSelectMultiple, required=False)
 
   # set choices in calling view, rather than as init arg...
   """
@@ -105,6 +105,7 @@ class AttendeeGiftsForm(Form):
     if len(self.cleaned_data['gifts']) > 2:
       raise ValidationError('No more than two gifts');
     return self.cleaned_data['gifts']
+
   
 
 

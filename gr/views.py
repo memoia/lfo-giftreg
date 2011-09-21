@@ -9,6 +9,7 @@ from django.db.models import F, Q
 import datetime
 from gr.models import *
 from gr.forms import *
+from django.contrib.auth.models import User
 
 """
 from django.core.mail import send_mail
@@ -185,34 +186,32 @@ def attendee_budget_edit(request, attendee_id, event_id):
 def attendee_gifts_list(request, attendee_id, event_id):
 
   # I hope there's a better way to do this....
-  event = Event.objects.get(pk=1)
-  recipient = User.objects.get(pk=event.recipient.id)
-  wishlist = RecipientWishList.objects \
-	      .filter(recipient=recipient) \
-	      .select_related(depth=1) \
-	      .exclude(gift__in= \
-		AttendeeGifts.objects.filter( \
-		  Q(event__id=event_id), \
-		  ~Q(attendee__id=attendee_id) \
-		) \
-	      )
-
-  # XXX need to further filter gifts---if not "active" and not selected
-  # by current attendee, don't show it.
+  event = Event.objects.get(pk=event_id)
+  wishlist = RecipientWishList.objects.attendee_options( \
+		      event.recipient.id, attendee_id, event_id)
 
   gifts = Gift.objects.filter(pk__in=[w.gift.id for w in wishlist])
 
-  # TODO pass this into form...
-  checked = AttendeeGifts.objects.filter(event__id=event_id, \
+  prev_selected = AttendeeGifts.objects.filter(event__id=event_id, \
 					    attendee__id=attendee_id)
   
   gift_choices = [ (x.id, x) for x in gifts ]
+  gift_checked = [ x.gift.id for x in prev_selected ]
 
   if request.method == 'POST':
 
     form = AttendeeGiftsForm(request.POST)
+    form.fields['gifts'].choices = gift_choices
     if form.is_valid():
-      raise Exception('haha')
+      prev_selected.delete()
+      selected_gifts = request.POST.getlist('gifts')
+      for g in selected_gifts:
+	ag = AttendeeGifts()
+	ag.attendee = User.objects.get(pk=attendee_id)
+	ag.event = Event.objects.get(pk=event_id)
+	ag.gift = Gift.objects.get(pk=g)
+	ag.save()
+      return redirect(event_view, event_id)
     else:
       form.fields['gifts'].choices = gift_choices
       form_fields = {'form':form}
@@ -222,6 +221,7 @@ def attendee_gifts_list(request, attendee_id, event_id):
 
   form = AttendeeGiftsForm(initial={'event':event_id,'attendee':attendee_id})
   form.fields['gifts'].choices = gift_choices
+  form.fields['gifts'].initial = gift_checked
 
   form_fields = {'form':form}
   form_fields.update(csrf(request))

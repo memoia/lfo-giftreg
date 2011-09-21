@@ -78,7 +78,32 @@ class Gift(models.Model):
   def __unicode__(self):
     return u"%s ($%s)" % (self.name, self.value)
 
+
+class RecipientWishListManager(models.Manager):
+  def attendee_options(self,recipient_id,attendee_id,event_id):
+    """ available items for an attendee to pick from """
+    available = super(RecipientWishListManager, self).get_query_set() \
+		  .filter(recipient__id=recipient_id) \
+		  .select_related(depth=1) \
+		  .exclude(gift__in= \
+		    AttendeeGifts.objects.filter( \
+		      models.Q(event__id=event_id), \
+		      ~models.Q(attendee__id=attendee_id) \
+		    ) \
+		  ) \
+		  .exclude( \
+		    models.Q(active=False), \
+		    ~models.Q(gift__in= \
+		      AttendeeGifts.objects.filter( \
+			event__id=event_id, \
+			attendee__id=attendee_id \
+		      ) \
+		    ) \
+		  )
+    return available
+
 class RecipientWishList(models.Model):
+  objects = RecipientWishListManager()
   recipient = models.ForeignKey(User)
   gift = models.ForeignKey(Gift)
   active = models.BooleanField(blank=False, default=True)
@@ -106,5 +131,9 @@ class AttendeeGifts(models.Model):
   attendee = models.ForeignKey(User)
   event = models.ForeignKey(Event)
   gift = models.ForeignKey(Gift)
-  
+
+  def save(self, *args, **kwargs):
+    # TODO prevent going over-budget
+    return super(AttendeeGifts, self).save(*args, **kwargs)
+
 
