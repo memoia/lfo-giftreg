@@ -85,7 +85,7 @@ class RecipientWishListManager(models.Manager):
     available = super(RecipientWishListManager, self).get_query_set() \
 		  .filter(recipient__id=recipient_id) \
 		  .select_related(depth=1) \
-		  .exclude(gift__in= \
+		  .exclude(gift__attendeegifts__in= \
 		    AttendeeGifts.objects.filter( \
 		      models.Q(event__id=event_id), \
 		      ~models.Q(attendee__id=attendee_id) \
@@ -93,7 +93,7 @@ class RecipientWishListManager(models.Manager):
 		  ) \
 		  .exclude( \
 		    models.Q(active=False), \
-		    ~models.Q(gift__in= \
+		    ~models.Q(gift__attendeegifts__in= \
 		      AttendeeGifts.objects.filter( \
 			event__id=event_id, \
 			attendee__id=attendee_id \
