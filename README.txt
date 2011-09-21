@@ -7,8 +7,32 @@ INSTALLATION
 Hopefully you can just use './manage.py runserver' to try it out.
 This is my environment:
 
-python -V			  ==> Python 2.6.6
-'.'.join(map(str,django.VERSION)) ==> '1.2.3.final.0'
+Linux 2.6.32:
+  python -V			    ==> Python 2.6.6
+  '.'.join(map(str,django.VERSION)) ==> '1.2.3.final.0'
+
+Windows XP SP3/Cygwin:
+  python -V			    ==> Python 2.6.5
+  '.'.join(map(str,django.VERSION)) ==> '1.3.1.final.0'
+
+
+INITIAL DATA
+
+The gr/fixtures/scenario.json file represents a "clean" scenario.
+The private/giftreg.db sqlite database is loaded from it.
+
+Users are: richard@foo.bar, rose@foo.bar, {alex,ann,adam,amy}@foo.bar
+All users have "password" (without quotes) as the password.
+Recipient users' names begin with R, attendee users' names begin with A.
+  Richard invites alex, ann, adam.
+  Rose invites ann, amy.
+  Ann gets impatient (Rose gift).
+  Ann gets boat, rocket (Richard gifts).
+  Alex gets airplane (Richard gift).
+
+Super user that can access all features available via:
+  /gr/auth/login/imm
+Disable it by setting GODMODE = False in settings.py.
 
 
 COMMENTS
@@ -53,8 +77,16 @@ it might be nice to:
 * Clarify whether events are exclusive or if any attendee can choose to
   attend any available event.
 
-* Clarify the significance of the "budget" in terms of how this may
-  affect the user's ability to see certain items.
+Afterwards:
+
+* Most of my time was spent finding out how "it's done" in Django.
+
+* I'm more happy that it works than I am with the code behind it.
+  Some blocks are repeated where they don't need to be, but the best
+  place to put that repeated logic isn't always obvious. Not sure
+  how to write tests for the views, which do most of the work.
+  This would be something I'd want to look into in the future.
+
 
 
 QUESTIONS
